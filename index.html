@@ -1,169 +1,180 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Be My Valentine 💖</title>
 
     <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <style>
-      * {
-        box-sizing: border-box;
+  <style>
+    * {
+      box-sizing: border-box;
         font-family: "Poppins", "Comic Sans MS", sans-serif;
-      }
+    }
 
-      body {
+    body {
         margin: 0;
-        min-height: 100vh;
+      min-height: 100vh;
         background: linear-gradient(135deg, #ffd6e8, #ffeef5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
         padding: 40px;
-      }
+    }
 
-      .card {
-        background: white;
+    .card {
+      background: white;
         width: 520px;
         min-height: 360px;
         padding: 60px 50px;
         border-radius: 36px;
-        text-align: center;
+      text-align: center;
         box-shadow: 0 40px 80px rgba(0, 0, 0, 0.18);
-        position: relative;
-      }
+      position: relative;
+    }
 
-      .emoji {
+    .emoji {
         font-size: 80px;
-        margin-bottom: 24px;
-      }
+      margin-bottom: 24px;
+    }
 
-      h1 {
-        font-size: 24px;
+    h1 {
+      font-size: 24px;
         margin-bottom: 50px;
-      }
+    }
 
       .buttons {
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        position: relative;
-      }
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      position: relative;
+    }
 
-      button {
-        border: none;
+    button {
+      border: none;
         padding: 16px 30px;
         border-radius: 999px;
         font-size: 17px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
+      cursor: pointer;
+      transition: transform 0.2s ease;
         white-space: nowrap;
-      }
+    }
 
       #yesBtn {
         background: #ff4d88;
-        color: white;
+      color: white;
         z-index: 2;
-      }
+    }
 
       #yesBtn:hover {
-        transform: scale(1.1);
-      }
+      transform: scale(1.1);
+    }
 
       #noBtn {
         background: #ccc;
         color: #555;
         pointer-events: none; /* NEVER CLICKABLE */
-      }
+    }
 
-      .note {
-        margin-top: 22px;
-        font-size: 14px;
-        color: #999;
-      }
-    </style>
-  </head>
-  <body>
+    .message p {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ec4899;
+    }
+  </style>
+</head>
+<body>
     <div class="card" id="card">
-      <div class="emoji">🐣💗</div>
-      <h1>Will you be my Valentine?</h1>
+    <div class="emoji">🐣💗</div>
+    <h1>Will you be my Valentine?</h1>
 
       <div class="buttons" id="buttons">
         <button id="yesBtn">Yes 💖</button>
         <button id="noBtn">No 🙃</button>
-      </div>
-
-      <div class="note">*No is not an option 😈*</div>
     </div>
 
-    <script>
-      const noBtn = document.getElementById("noBtn");
+    <div id="message" class="message" style="display: none;">
+      <p>No isn't an option ✨</p>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
       const yesBtn = document.getElementById("yesBtn");
+    const messageDiv = document.getElementById('message');
+    let escaped = false;
+    let initialRect = null;
 
-      let escaped = false;
-      let initialRect = null;
-
-      function escapeNoButton() {
-        if (!escaped) {
+    function escapeNoButton() {
+      if (!escaped) {
           // LOCK INITIAL POSITION (INSIDE CARD)
-          initialRect = noBtn.getBoundingClientRect();
+        initialRect = noBtn.getBoundingClientRect();
 
           noBtn.style.position = "fixed";
           noBtn.style.left = initialRect.left + "px";
           noBtn.style.top = initialRect.top + "px";
 
-          escaped = true;
-        }
-
-        const padding = 20;
-        const yesRect = yesBtn.getBoundingClientRect();
-        const noRect = noBtn.getBoundingClientRect();
-
-        let x, y, safe;
-
-        do {
-          x = Math.random() * (window.innerWidth - noRect.width - padding);
-          y = Math.random() * (window.innerHeight - noRect.height - padding);
-
-          safe =
-            x + noRect.width < yesRect.left ||
-            x > yesRect.right ||
-            y + noRect.height < yesRect.top ||
-            y > yesRect.bottom;
-        } while (!safe);
-
-        noBtn.style.left = `${x}px`;
-        noBtn.style.top = `${y}px`;
+        escaped = true;
       }
+
+      const padding = 20;
+      const yesRect = yesBtn.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      let x, y, safe;
+
+      do {
+        x = Math.random() * (window.innerWidth - noRect.width - padding);
+        y = Math.random() * (window.innerHeight - noRect.height - padding);
+
+        safe =
+          x + noRect.width < yesRect.left ||
+          x > yesRect.right ||
+          y + noRect.height < yesRect.top ||
+          y > yesRect.bottom;
+      } while (!safe);
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
 
       // Desktop: flee when cursor is near
       document.addEventListener("mousemove", (e) => {
-        const rect = noBtn.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
+      const rect = noBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
 
-        const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
+      const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
         if (distance < 130) escapeNoButton();
-      });
+    });
 
       // Mobile: flee on touch
       document.addEventListener("touchstart", escapeNoButton);
 
       // YES = HEART ATTACK
       yesBtn.addEventListener("click", () => {
-        const end = Date.now() + 3500;
+      const end = Date.now() + 3500;
 
-        (function frame() {
-          confetti({
-            particleCount: 12,
-            spread: 90,
+      const frame = () => {
+        confetti({
+          particleCount: 12,
+          spread: 90,
             colors: ["#ff4d88", "#ff99bb", "#ffccd9"],
-          });
-          if (Date.now() < end) requestAnimationFrame(frame);
-        })();
-      });
-    </script>
-  </body>
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+
+      frame();
+
+      // Show message after confetti ends
+      setTimeout(() => {
+        messageDiv.style.display = 'block';
+      }, 1500);
+    });
+  </script>
+</body>
 </html>
