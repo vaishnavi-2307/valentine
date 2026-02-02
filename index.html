@@ -88,11 +88,11 @@
 <body>
     <div class="card" id="card">
     <div class="emoji">🐣💗</div>
-    <h1>Will you be my Valentine?</h1>
+    <h1>Vedant, Will you be my Valentine?</h1>
 
       <div class="buttons" id="buttons">
-        <button id="yesBtn">Yes 💖</button>
-        <button id="noBtn">No 🙃</button>
+        <button id="yesBtn">Yes </button>
+        <button id="noBtn">No 💔</button>
     </div>
 
     <div id="message" class="message" style="display: none;">
@@ -160,7 +160,7 @@
       const frame = () => {
         confetti({
           particleCount: 12,
-          spread: 90,
+          spread: 10,
             colors: ["#ff4d88", "#ff99bb", "#ffccd9"],
         });
         if (Date.now() < end) {
@@ -173,7 +173,7 @@
       // Show message after confetti ends
       setTimeout(() => {
         messageDiv.style.display = 'block';
-      }, 1500);
+      }, 1000);
     });
   </script>
 </body>
